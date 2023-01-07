@@ -31,10 +31,20 @@ on:
         default: '.'
 
 jobs:
+  get-tags:
+    runs-on: [self-hosted]
+    outputs:
+      tags: ${{ steps.set-output-id.outputs.tags }}
+    steps:
+      - name: set-output
+        id: set-output-id
+        run: |
+          VERSION=$GITHUB_RUN_NUMBER
+          echo ::set-output name=tags::${VERSION}
+
   build:
     runs-on: [self-hosted]
     steps:
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
         with:
@@ -53,4 +63,4 @@ jobs:
         with:
           # context: .
           push: true
-          tags: ${{ env.JFROG_URL }}/${{ env.GOLANG_REPOSITORY }}/${{ env.GOLANG_IMAGE }}:${{ input.GOLANG_TAG }}
+          tags: ${{ env.JFROG_URL }}/${{ env.GOLANG_REPOSITORY }}/${{ env.GOLANG_IMAGE }}:${{ steps.get-tags.outputs.tags }}
