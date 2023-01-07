@@ -1,0 +1,53 @@
+name: golang-pipeline
+
+on:
+  workflow_call:
+    inputs:
+      # pass in environment through manual trigger, if not passed in, default to 'dev'
+      env:
+        required: true
+        type: string
+        default: 'dev'
+      # working-directory is added to accommodate monorepo.  For multi repo, defaults to '.', current directory
+      working-directory:
+        required: false
+        type: string
+        default: '.'
+      JFROG_URL:
+        required: true
+        type: string
+        default: '.'
+      GOLANG_REPOSITORY:
+        required: true
+        type: string
+        default: '.'
+      GOLANG_IMAGE:
+        required: true
+        type: string
+        default: '.'
+      GOLANG_TAG:
+        required: true
+        type: string
+        default: '.'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to JFrog 🐸  
+        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+        with:
+          registry: ${{ inputs.JFROG_URL }}
+          username: ${{ secrets.JFROG_USER }}
+          password: ${{ secrets.JFROG_PASSWORD }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          # context: .
+          push: true
+          tags: ${{ inputs.JFROG_URL }}/${{ inputs.GOLANG_REPOSITORY }}/${{ inputs.GOLANG_IMAGE }}:${{ inputs.GOLANG_TAG }}
