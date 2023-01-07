@@ -25,10 +25,10 @@ on:
       #   required: true
       #   type: string
       #   default: '.'
-      GOLANG_TAG:
-        required: true
-        type: string
-        default: '.'
+      # GOLANG_TAG:
+      #   required: true
+      #   type: string
+      #   default: '.'
 
 jobs:
   get-tags:
@@ -44,6 +44,7 @@ jobs:
 
   build:
     runs-on: [self-hosted]
+    needs: get-tags
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
