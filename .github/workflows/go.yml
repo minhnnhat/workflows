@@ -50,4 +50,4 @@ jobs:
         with:
           # context: .
           push: true
-          tags: ${{ inputs.JFROG_URL }}/${{ inputs.GOLANG_REPOSITORY }}/${{ inputs.GOLANG_IMAGE }}:${{ inputs.GOLANG_TAG }}
+          tags: ${{ inputs.JFROG_URL }}/${{ inputs.GOLANG_REPOSITORY }}/${{ inputs.GOLANG_IMAGE }}:$env:GITHUB_RUN_NUMBER
