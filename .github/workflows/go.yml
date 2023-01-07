@@ -13,22 +13,22 @@ on:
         required: false
         type: string
         default: '.'
-      JFROG_URL:
-        required: true
-        type: string
-        default: '.'
-      GOLANG_REPOSITORY:
-        required: true
-        type: string
-        default: '.'
-      GOLANG_IMAGE:
-        required: true
-        type: string
-        default: '.'
-      GOLANG_TAG:
-        required: true
-        type: string
-        default: '.'
+      # JFROG_URL:
+      #   required: true
+      #   type: string
+      #   default: '.'
+      # GOLANG_REPOSITORY:
+      #   required: true
+      #   type: string
+      #   default: '.'
+      # GOLANG_IMAGE:
+      #   required: true
+      #   type: string
+      #   default: '.'
+      # GOLANG_TAG:
+      #   required: true
+      #   type: string
+      #   default: '.'
 
 jobs:
   build:
