@@ -60,10 +60,26 @@ jobs:
           registry: ${{ secrets.JFROG_URL }}
           username: ${{ secrets.JFROG_USER }}
           password: ${{ secrets.JFROG_PASSWORD }}
+      
+      - name: Build image
+        run: |
+          docker build -t ${{ secrets.JFROG_URL }}/${{ secrets.GOLANG_REPOSITORY }}/${{ secrets.GOLANG_IMAGE }}:${{ needs.get-tags.outputs.tags }} .
 
-      - name: Build and push
-        uses: docker/build-push-action@v3
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
         with:
-          context: .
-          push: true
-          tags: ${{ secrets.JFROG_URL }}/${{ secrets.GOLANG_REPOSITORY }}/${{ secrets.GOLANG_IMAGE }}:${{ needs.get-tags.outputs.tags }}
+          image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      # - name: Build and push
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: ${{ secrets.JFROG_URL }}/${{ secrets.GOLANG_REPOSITORY }}/${{ secrets.GOLANG_IMAGE }}:${{ needs.get-tags.outputs.tags }}
