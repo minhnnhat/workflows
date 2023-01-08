@@ -62,6 +62,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
-          # context: .
+          context: .
           push: true
-          tags: ${{ env.JFROG_URL }}/${{ env.GOLANG_REPOSITORY }}/${{ env.GOLANG_IMAGE }}:${{ steps.get-tags.outputs.tags }}
+          tags: ${{ env.JFROG_URL }}/${{ env.GOLANG_REPOSITORY }}/${{ env.GOLANG_IMAGE }}:${{ needs.get-tags.outputs.tags }}
