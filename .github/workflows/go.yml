@@ -31,8 +31,8 @@ on:
       #   default: '.'
 
 jobs:
-  get-tags:
-    runs-on: [self-hosted]
+  prepare:
+    runs-on: ubuntu-latest
     outputs:
       tags: ${{ steps.set-output-id.outputs.tags }}
     steps:
@@ -41,16 +41,15 @@ jobs:
         run: |
           VERSION=$GITHUB_RUN_NUMBER
           echo ::set-output name=tags::${VERSION}
+      - name: Harden Runner
+        uses: step-security/harden-runner@ebacdc22ef6c2cfb85ee5ded8f2e640f4c776dd5
+        with:
+          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
   
   build:
     runs-on: [self-hosted]
     needs: get-tags
     steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@ebacdc22ef6c2cfb85ee5ded8f2e640f4c776dd5
-        with:
-          egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
-
       - uses: actions/checkout@v2
 
       - name: Set up Docker Buildx
