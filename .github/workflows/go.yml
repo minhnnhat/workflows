@@ -64,7 +64,7 @@ jobs:
 
       - name: Create folder
         run: |
-          mkdir -p $GITHUB_WORKSPACE
+          mkdir -p /home/runner/_work/go-hello/go-hello
 
       - name: gitleaks-action
         uses: zricethezav/gitleaks-action@master
