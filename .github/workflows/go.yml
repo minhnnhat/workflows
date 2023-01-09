@@ -42,6 +42,13 @@ jobs:
 
       - name: gitleaks-action
         uses: zricethezav/gitleaks-action@master
+      
+      - name: dump
+        run: |
+          echo 'github.workspace === ${{ github.workspace }}'
+          echo "GITHUB_WORKSPACE === $GITHUB_WORKSPACE"
+          echo 'runner.workspace === ${{ runner.workspace }}'
+          echo "RUNNER_WORKSPACE === $RUNNER_WORKSPACE"
 
       - name: set-output
         id: set-output-id
@@ -54,52 +61,47 @@ jobs:
         with:
           egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
   
-  build:
-    runs-on: [self-hosted]
-    needs: prepare
-    steps:
-      # - uses: actions/checkout@v2
-      #   with:
-      #     fetch-depth: '0'
+  # build:
+  #   runs-on: [self-hosted]
+  #   needs: prepare
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #       with:
+  #         fetch-depth: '0'
 
-      # - name: gitleaks-action
-      #   uses: gitleaks/gitleaks-action@v2
-      #   env:
-      #     GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
+  #     - name: gitleaks-action
+  #       uses: gitleaks/gitleaks-action@v2
+  #       env:
+  #         GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
+
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v2
+  #       with:
+  #         driver: remote
+  #         endpoint: tcp://buildkitd-headless:1234
+
+  #     - name: Login to JFrog 🐸  
+  #       uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+  #       with:
+  #         registry: ${{ secrets.JFROG_URL }}
+  #         username: ${{ secrets.JFROG_USER }}
+  #         password: ${{ secrets.JFROG_PASSWORD }}
       
-      # - name: Upload SARIF file
-      #   uses: github/codeql-action/upload-sarif@v2
-      #   with:
-      #     sarif_file: /runner/_work/go-hello/go-hello/results.sarif
+  #     - name: Build image
+  #       run: |
+  #         docker build -t ${{ secrets.JFROG_URL }}/${{ secrets.GOLANG_REPOSITORY }}/${{ secrets.GOLANG_IMAGE }}:${{ needs.prepare.outputs.tags }} .
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        with:
-          driver: remote
-          endpoint: tcp://buildkitd-headless:1234
+  #     - name: Run Trivy vulnerability scanner
+  #       uses: aquasecurity/trivy-action@master
+  #       with:
+  #         image-ref: '${{ secrets.JFROG_URL }}/${{ secrets.GOLANG_REPOSITORY }}/${{ secrets.GOLANG_IMAGE }}:${{ needs.prepare.outputs.tags }}'
+  #         format: 'sarif'
+  #         output: 'trivy-results.sarif'
 
-      - name: Login to JFrog 🐸  
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          registry: ${{ secrets.JFROG_URL }}
-          username: ${{ secrets.JFROG_USER }}
-          password: ${{ secrets.JFROG_PASSWORD }}
-      
-      - name: Build image
-        run: |
-          docker build -t ${{ secrets.JFROG_URL }}/${{ secrets.GOLANG_REPOSITORY }}/${{ secrets.GOLANG_IMAGE }}:${{ needs.prepare.outputs.tags }} .
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: '${{ secrets.JFROG_URL }}/${{ secrets.GOLANG_REPOSITORY }}/${{ secrets.GOLANG_IMAGE }}:${{ needs.prepare.outputs.tags }}'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: 'trivy-results.sarif'
+  #     - name: Upload Trivy scan results to GitHub Security tab
+  #       uses: github/codeql-action/upload-sarif@v2
+  #       with:
+  #         sarif_file: 'trivy-results.sarif'
 
       # - name: Build and push
       #   uses: docker/build-push-action@v3
