@@ -59,6 +59,11 @@ jobs:
     needs: prepare
     steps:
       - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+      - name: gitleaks-action
+        uses: zricethezav/gitleaks-action@master
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
