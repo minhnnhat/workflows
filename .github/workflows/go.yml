@@ -36,11 +36,19 @@ jobs:
     outputs:
       tags: ${{ steps.set-output-id.outputs.tags }}
     steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
+
+      - name: gitleaks-action
+        uses: zricethezav/gitleaks-action@master
+
       - name: set-output
         id: set-output-id
         run: |
           VERSION=$GITHUB_RUN_NUMBER
           echo ::set-output name=tags::${VERSION}
+
       - name: Harden Runner
         uses: step-security/harden-runner@ebacdc22ef6c2cfb85ee5ded8f2e640f4c776dd5
         with:
