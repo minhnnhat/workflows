@@ -54,13 +54,20 @@ jobs:
         with:
           egress-policy: audit # TODO: change to 'egress-policy: block' after couple of runs
   
-  # build:
-  #   runs-on: [self-hosted]
-  #   needs: prepare
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #       with:
-  #         fetch-depth: '0'
+  build:
+    runs-on: [self-hosted]
+    needs: prepare
+    steps:
+      - name: dump
+        run: |
+          echo 'github.workspace === ${{ github.workspace }}'
+          echo "GITHUB_WORKSPACE === $GITHUB_WORKSPACE"
+          echo 'runner.workspace === ${{ runner.workspace }}'
+          echo "RUNNER_WORKSPACE === $RUNNER_WORKSPACE"
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
 
   #     - name: gitleaks-action
   #       uses: gitleaks/gitleaks-action@v2
