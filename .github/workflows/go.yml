@@ -36,12 +36,12 @@ jobs:
     outputs:
       tags: ${{ steps.set-output-id.outputs.tags }}
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
+      # - uses: actions/checkout@v2
+      #   with:
+      #     fetch-depth: '0'
 
-      - name: gitleaks-action
-        uses: zricethezav/gitleaks-action@master
+      # - name: gitleaks-action
+      #   uses: zricethezav/gitleaks-action@master
 
       - name: set-output
         id: set-output-id
@@ -61,6 +61,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: '0'
+
+      - name: Create folder
+        run: |
+          mkdir -p $GITHUB_WORKSPACE
 
       - name: gitleaks-action
         uses: zricethezav/gitleaks-action@master
