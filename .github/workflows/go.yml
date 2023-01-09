@@ -36,12 +36,12 @@ jobs:
     outputs:
       tags: ${{ steps.set-output-id.outputs.tags }}
     steps:
-      # - uses: actions/checkout@v2
-      #   with:
-      #     fetch-depth: '0'
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '0'
 
-      # - name: gitleaks-action
-      #   uses: zricethezav/gitleaks-action@master
+      - name: gitleaks-action
+        uses: zricethezav/gitleaks-action@master
 
       - name: set-output
         id: set-output-id
@@ -58,19 +58,19 @@ jobs:
     runs-on: [self-hosted]
     needs: prepare
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
+      # - uses: actions/checkout@v2
+      #   with:
+      #     fetch-depth: '0'
 
-      - name: gitleaks-action
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
+      # - name: gitleaks-action
+      #   uses: gitleaks/gitleaks-action@v2
+      #   env:
+      #     GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
       
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: /runner/_work/go-hello/go-hello/results.sarif
+      # - name: Upload SARIF file
+      #   uses: github/codeql-action/upload-sarif@v2
+      #   with:
+      #     sarif_file: /runner/_work/go-hello/go-hello/results.sarif
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
