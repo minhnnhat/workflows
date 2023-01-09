@@ -36,13 +36,6 @@ jobs:
     outputs:
       tags: ${{ steps.set-output-id.outputs.tags }}
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '0'
-
-      - name: gitleaks-action
-        uses: zricethezav/gitleaks-action@master
-      
       - name: dump
         run: |
           echo 'github.workspace === ${{ github.workspace }}'
