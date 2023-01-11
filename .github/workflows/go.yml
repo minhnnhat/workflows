@@ -71,10 +71,8 @@ jobs:
         with:
           fetch-depth: '0'
 
-  #     - name: gitleaks-action
-  #       uses: gitleaks/gitleaks-action@v2
-  #       env:
-  #         GITLEAKS_ENABLE_UPLOAD_ARTIFACT: false
+      - name: gitleaks-action
+        uses: gitleaks/gitleaks-action@v2
 
   #     - name: Set up Docker Buildx
   #       uses: docker/setup-buildx-action@v2
